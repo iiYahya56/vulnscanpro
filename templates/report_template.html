@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vulnerability Report for {{ host }}</title>
+    <style>
+        body { font-family: Arial; margin: 2em; background-color: #f9f9f9; }
+        h1, h2 { color: #333; }
+        .service { border: 1px solid #ccc; margin-bottom: 20px; padding: 15px; border-radius: 10px; background: white; }
+        .vuln { margin-left: 20px; }
+        .vuln a { color: #d9534f; }
+    </style>
+</head>
+<body>
+    <h1>Vulnerability Report</h1>
+    <h2>Target: {{ host }}</h2>
+
+    {% for svc in results %}
+        <div class="service">
+            <strong>{{ svc.name }} {{ svc.version }}</strong> ({{ svc.protocol }}/{{ svc.port }})<br>
+            {% if svc.vulnerabilities %}
+                <ul>
+                {% for v in svc.vulnerabilities %}
+                    <li class="vuln">
+                        <a href="{{ v.href }}" target="_blank">{{ v.id }}</a> — CVSS: {{ v.cvss }}<br>
+                        {{ v.description }}
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <em>No known CVEs found.</em>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>
